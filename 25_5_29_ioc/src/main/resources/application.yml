@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/testdb?characterEncoding=utf8&useSSL=false
+    username: liren
+    password: 123123
+
+mykey1: java
+
+string:
+  s1: Hello \n liren.
+  s2: 'Hello \n liren.'
+  s3: "Hello \n liren."
+
+# 字符串
+string.value: Hello
+
+# 布尔值，true或false
+boolean.value1: true
+boolean.value2: false
+
+# 整数
+int.value: 10
+
+# 浮点数
+float.value: 3.14159
+
+# Null，～代表null
+null.value: ~
+
+# 空字符串
+#，直接后面什么都不加就可以了，但这种方式不直观，更多的表示是使用引号括起来
+empty.value: ''
+
+student:
+  id: 1
+  name: liren
+  age: 18
+
+mylist:
+  name:
+    - mysql
+    - java
+    - liren
+  key:
+    - v1
+    - v2
+    - v3
+
+wa:
+  - mysql
+  - java
+  - liren
+
+myapp:
+  name: liren
+  tags:
+    - java
+    - spring
+    - yaml
+  metadata:
+    version: v1.0
+    author: liren dada
+  servers:
+    - name: server1
+      ip: 192.168.1.1
+    - name: server2
+      ip: 192.168.1.2

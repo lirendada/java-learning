@@ -1,0 +1,56 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liren.book_system.mapper.BookInfoMapper">
+
+    <insert id="insertBook">
+        insert into book_info
+            (book_name, author, count, price, publish, status)
+        values
+            (#{bookName}, #{author}, #{count}, #{price}, #{publish}, #{status})
+    </insert>
+    <update id="updateBook">
+        update book_info
+        <set>
+            <if test="bookName != null">
+                book_name = #{bookName},
+            </if>
+            <if test="author != null">
+                author = #{author},
+            </if>
+            <if test="count != null">
+                `count` = #{count},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="publish != null">
+                publish = #{publish},
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectTotalBook" resultType="java.lang.Integer">
+        select count(1) from book_info where status != 0
+    </select>
+
+    <select id="selectBookByPage" resultType="com.liren.book_system.model.BookInfo">
+        select * from book_info where status != 0 order by id limit #{offset}, #{pageSize}
+    </select>
+
+    <select id="selectBookById" resultType="com.liren.book_system.model.BookInfo">
+        select * from book_info where id = #{id} and status != 0
+    </select>
+
+    <delete id="deleteBatchBook">
+        update book_info
+        <set> status=0 </set>
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

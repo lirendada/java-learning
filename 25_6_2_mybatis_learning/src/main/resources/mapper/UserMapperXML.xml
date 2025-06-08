@@ -1,0 +1,127 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liren.mybatis.mapper.UserMapperXML">
+    <resultMap id="BaseMap" type="com.liren.mybatis.model.User">
+        <id property="id" column="id"></id>
+        <result column="create_time" property="createTime"></result>
+        <result column="delete_flag" property="deleteFlag"></result>
+        <result column="update_time" property="updateTime"></result>
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseMap">
+        select * from user_info
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        insert into user_info (username, password, age, gender, phone)
+        values (#{username}, #{password}, #{age}, #{gender}, #{phone})
+    </insert>
+
+    <update id="updateUser">
+        update user_info set password = #{password} where id = #{id}
+    </update>
+
+    <delete id="deleteUser">
+        delete from user_info where id = #{id}
+    </delete>
+
+
+    <!-- 测试if标签，以及trim标签 -->
+    <insert id="insertUserTestIf">
+        insert into user_info
+           <trim prefix="(" suffix=")" prefixOverrides="," suffixOverrides=",">
+               username,
+               password,
+               <if test="age != null">
+                   age,
+               </if>
+               <if test="gender != null">
+                   gender,
+               </if>
+               <if test="phone != null">
+                   phone,
+               </if>
+           </trim>
+        values
+            <trim prefix="(" suffix=")" prefixOverrides="," suffixOverrides=",">
+                #{username},
+                #{password},
+                <if test="age != null">
+                    #{age},
+                </if>
+                <if test="age != null">
+                    #{gender},
+                </if>
+                <if test="phone != null">
+                    #{phone},
+                </if>
+            </trim>
+    </insert>
+
+
+    <select id="selectUserTestWhere" resultType="com.liren.mybatis.model.User">
+        select * from user_info
+        where 1=1
+            <if test="age != null">
+                age = #{age}
+            </if>
+            <if test="deleteFlag != null">
+                and delete_flag = #{deleteFlag}
+            </if>
+
+<!--        select * from user_info-->
+<!--        <where>-->
+<!--            <if test="age != null">-->
+<!--                age = #{age}-->
+<!--            </if>-->
+<!--            <if test="deleteFlag != null">-->
+<!--                and delete_flag = #{deleteFlag}-->
+<!--            </if>-->
+<!--        </where>-->
+    </select>
+
+
+    <update id="updateUserTestSet">
+        update user_info
+        <set>
+            <if test="age != null">
+                age = #{age}
+            </if>
+            <if test="deleteFlag != null">
+                and delete_flag = #{deleteFlag}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+<!--  delete from user_info where id=1 or id=2  -->
+<!--  delete from user_info where id in (1, 2)  -->
+    <delete id="deleteUserTestForeach">
+        delete from user_info where
+        <foreach collection="ids" item="id" separator="or">
+            id=#{id}
+        </foreach>
+
+<!--        delete from user_info-->
+<!--        where id in-->
+<!--        <foreach collection="ids" item="id" open="(" close=")" separator=",">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+    </delete>
+
+
+    <sql id="allColomn">
+        id, username, password, age, gender, phone, delete_flag, create_time, update_time
+    </sql>
+    <select id="selectUserTestInclude" resultType="com.liren.mybatis.model.User">
+        select
+        <include refid="allColomn"></include>
+        from user_info
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>
+

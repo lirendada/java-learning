@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: 25_6_1_captcha
+
+captcha:
+  width: 120
+  height: 50
+  session:
+    code: CAPTCHA_SESSION_CODE
+    date: CAPTCHA_SESSION_DATE
