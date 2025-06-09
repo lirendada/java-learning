@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
 public class BookService {
     @Autowired
@@ -19,7 +18,7 @@ public class BookService {
         bookInfoMapper.insertBook(bookInfo);
     }
 
-    public PageResult getBookByPage(PageRequest req) {
+    public PageResult<BookInfo> getBookByPage(PageRequest req) {
         // 1. 获取元素
         List<BookInfo> books = bookInfoMapper.selectBookByPage(req.getPageSize(), req.getOffset());
         for(BookInfo book : books) {
@@ -30,7 +29,7 @@ public class BookService {
         Integer total = bookInfoMapper.selectTotalBook();
 
         // 3. 打包成PageResult返回
-        return new PageResult(total, books, req);
+        return new PageResult<>(total, books, req);
     }
 
     public BookInfo getBookById(Integer id) {

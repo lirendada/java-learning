@@ -1,8 +1,9 @@
 package com.liren.book_system.controller;
 
-import com.liren.book_system.mapper.BookInfoMapper;
+import com.liren.book_system.constant.Constants;
 import com.liren.book_system.model.*;
 import com.liren.book_system.service.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -18,9 +19,16 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/getListByPage")
-    public PageResult getListByPage(PageRequest pageRequest) {
+    public Result<PageResult<BookInfo>> getListByPage(PageRequest pageRequest, HttpSession session) {
         log.info("获取图书，PageRequest：{}", pageRequest);
-        return bookService.getBookByPage(pageRequest);
+
+        UserInfo user = (UserInfo)session.getAttribute(Constants.SESSION_USER_KEY);
+        if(user == null || user.getId() <= 0) {
+            // 用户未登录
+            return Result.unlogin();
+        }
+        PageResult<BookInfo> pageResult = bookService.getBookByPage(pageRequest);
+        return Result.success(pageResult);
     }
 
     @PostMapping("/addBook")

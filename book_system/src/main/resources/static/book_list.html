@@ -53,12 +53,15 @@
                     url: "/book/getListByPage" + location.search, // 💥💥💥
                     type: "get",
                     success: function(result) {
-                        if(result == null || result.records == null) {
-                            return;
+                        console.log(result);
+                        if(result == null || result.code == "UNLOGIN") {
+                            alert(result.errMsg);
+                            location.href = "login.html";
                         }
+
                         console.log(location.search);
                         let finalHtml = "";
-                        for (var book of result.records) {
+                        for (var book of result.data.records) {
                             finalHtml += '<tr>';
                             finalHtml += '<td><input type="checkbox" name="selectBook" value="' + book.id + '" id="selectBook" class="book-select"></td>';
                             finalHtml += '<td>' + book.id + '</td>';
@@ -77,10 +80,10 @@
 
                         // 翻页信息💥💥💥
                         $("#pageContainer").jqPaginator({
-                            totalCounts: result.total,    // ✅ 总记录数💥💥💥
+                            totalCounts: result.data.total,    // ✅ 总记录数💥💥💥
                             pageSize: 10,                 // ✅ 每页显示10条数据
                             visiblePages: 5,              // ✅ 同时显示最多5个分页按钮（例如 1 2 3 4 5）
-                            currentPage: result.pageRequest.currentPage, // ✅ 初始加载时当前在第1页💥💥💥
+                            currentPage: result.data.pageRequest.currentPage, // ✅ 初始加载时当前在第1页💥💥💥
                             first: '<li class="page-item"><a class="page-link">🏠 首页</a></li>',
                             prev: '<li class="page-item"><a class="page-link" href="javascript:void(0);">👈 上一页<\/a><\/li>',
                             next: '<li class="page-item"><a class="page-link" href="javascript:void(0);">下一页 👉<\/a><\/li>',

@@ -9,9 +9,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageResult {
-    private Integer total;          // 总记录数
-    private List<BookInfo> records; // 所查询到的数据列表
+public class PageResult<T> {
+    private Integer total;   // 总记录数
+    private List<T> records; // 所查询到的数据列表
 
     private PageRequest pageRequest;
 }

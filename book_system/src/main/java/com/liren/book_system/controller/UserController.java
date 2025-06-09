@@ -1,5 +1,6 @@
 package com.liren.book_system.controller;
 
+import com.liren.book_system.constant.Constants;
 import com.liren.book_system.model.UserInfo;
 import com.liren.book_system.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -24,7 +25,7 @@ public class UserController {
         }
         UserInfo userInfo = userService.login(name, password);
         if(userInfo != null) {
-            session.setAttribute("user", userInfo); // ✅ 存储会话：由 Controller 负责
+            session.setAttribute(Constants.SESSION_USER_KEY, userInfo); // ✅ 存储会话：由 Controller 负责
             return true;
         } else {
             return false;
