@@ -1,5 +1,6 @@
 package com.liren.book_system.aspect;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,8 +16,18 @@ public class TimeAspect {
     public Object recordTime(ProceedingJoinPoint pjp) throws Throwable {
         long start = System.currentTimeMillis();
         Object proceed = pjp.proceed();
+        for (Object arg : pjp.getArgs()) {
+            if (arg instanceof HttpServletRequest) {
+                HttpServletRequest request = (HttpServletRequest) arg;
+                String uri = request.getRequestURI();
+                if (uri.startsWith("/.well-known") || uri.endsWith(".ico") || uri.equals("/error")) {
+                    return proceed;
+                }
+                log.info("切面拦截了 URI: " + request.getRequestURI());
+            }
+        }
         long end = System.currentTimeMillis();
-        log.info(pjp.getSignature() + "耗时：" + (end - start) + "ms");
+        log.info(pjp.getSignature().toString() + "耗时：" + (end - start) + "ms");
         return proceed;
     }
 }

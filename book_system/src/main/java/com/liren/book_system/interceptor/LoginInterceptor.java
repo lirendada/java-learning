@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("preHandle...");
+        log.info("preHandle..." + request.getRequestURI());
         HttpSession session = request.getSession(false);
         if(!checkLogin(session)) {
             // 如果未登录，设置状态码、错误信息等然后返回false
