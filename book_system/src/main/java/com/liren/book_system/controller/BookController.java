@@ -19,20 +19,15 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/getListByPage")
-    public Result<PageResult<BookInfo>> getListByPage(PageRequest pageRequest, HttpSession session) {
+    public Result getListByPage(PageRequest pageRequest) {
         log.info("获取图书，PageRequest：{}", pageRequest);
 
-        UserInfo user = (UserInfo)session.getAttribute(Constants.SESSION_USER_KEY);
-        if(user == null || user.getId() <= 0) {
-            // 用户未登录
-            return Result.unlogin();
-        }
         PageResult<BookInfo> pageResult = bookService.getBookByPage(pageRequest);
         return Result.success(pageResult);
     }
 
     @PostMapping("/addBook")
-    public String addBook(BookInfo bookInfo) {
+    public Result addBook(BookInfo bookInfo) {
         log.info("添加图书，bookInfo：{}", bookInfo);
         if(!StringUtils.hasLength(bookInfo.getBookName()) ||
             !StringUtils.hasLength(bookInfo.getAuthor()) ||
@@ -41,51 +36,51 @@ public class BookController {
             !StringUtils.hasLength(bookInfo.getPublish()) ||
             bookInfo.getStatus() == null) {
             log.warn("添加图书参数不合法，bookInfo：{}", bookInfo);
-            return "参数有误，请检查书籍信息~";
+            return Result.fail("参数有误，请检查书籍信息~");
         }
 
         try {
             bookService.addBook(bookInfo);
-            return ""; // 不抛异常则走到这里
+            return Result.success(""); // 不抛异常则走到这里
         } catch (Exception e) {
             log.error("添加书籍失败，请重新尝试，e：{}", e);
-            return e.getMessage();
+            return Result.fail(e.getMessage());
         }
     }
 
     @GetMapping("/queryBookById")
-    public BookInfo queryBookById(Integer bookId) {
+    public Result queryBookById(Integer bookId) {
         log.info("queryBookById: " + bookId);
         if(bookId == null || bookId <= 0) {
             return null;
         }
-        return bookService.getBookById(bookId);
+        return Result.success(bookService.getBookById(bookId));
     }
 
     @PostMapping("/updateBook")
-    public String updateBook(BookInfo bookInfo) {
+    public Result updateBook(BookInfo bookInfo) {
         log.info("updateBook: " + bookInfo);
         try {
             bookService.updateBook(bookInfo);
-            return "";
+            return Result.success("");
         } catch(Exception e) {
             log.error("更新图书失败，e：", e);
-            return e.getMessage();
+            return Result.fail(e.getMessage());
         }
     }
 
     @PostMapping("/batchDeleteBook")
-    public String batchDeleteBook(Integer[] ids) {
+    public Result batchDeleteBook(Integer[] ids) {
         log.info("batchDeleteBook: " + ids);
         if(ids == null) {
-            return "列表为空，请重新选择要删除的数据~";
+            return Result.fail("列表为空，请重新选择要删除的数据~");
         }
         try {
             bookService.batchDeleteBook(ids);
-            return "";
+            return Result.success("");
         } catch (Exception e) {
             log.error("批量删除图书失败，e：", e);
-            return e.getMessage();
+            return Result.fail(e.getMessage());
         }
     }
 }

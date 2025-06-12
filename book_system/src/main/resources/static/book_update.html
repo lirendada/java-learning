@@ -64,16 +64,26 @@
            url: "book/queryBookById" + location.search,
            type: "get",
            success: function(result) {
-                if(result != null) {
-                    $("#bookId").val(result.id);
-                    $("#bookName").val(result.bookName);
-                    $("#bookAuthor").val(result.author);
-                    $("#bookStock").val(result.count);
-                    $("#bookPrice").val(result.price);
-                    $("#bookPublisher").val(result.publish);
-                    $("#bookStatus").val(result.status);
+               console.log(result);
+                if(result.data != null) {
+                    $("#bookId").val(result.data.id);
+                    $("#bookName").val(result.data.bookName);
+                    $("#bookAuthor").val(result.data.author);
+                    $("#bookStock").val(result.data.count);
+                    $("#bookPrice").val(result.data.price);
+                    $("#bookPublisher").val(result.data.publish);
+                    $("#bookStatus").val(result.data.status);
+                } else {
+                    alert("出错了~");
+                    location.href = "book_list.html";
                 }
-           }
+           },
+            error: function(err) {
+               if(err.status == 401) {
+                   alert("用户未登录，请先登录！");
+                   location.href = "login.html";
+               }
+            }
         });
         
         function update() {
@@ -82,11 +92,18 @@
                type: "post",
                data: $("#updateBook").serialize(),
                 success: function(result) {
-                   if(result == "") {
+                   console.log(result);
+                   if(result.data == "" && result.code == 200) {
                        alert("更新成功");
                        location.href = "book_list.html";
                    } else {
                        alert(result);
+                   }
+                },
+                error: function(err) {
+                   if(err.status == 401) {
+                       alert("用户未登录~");
+                       location.href = "login.html";
                    }
                 }
             });

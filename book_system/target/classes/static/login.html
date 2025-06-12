@@ -42,7 +42,7 @@
                     password: $("#password").val()
                 },
                 success: function(result) {
-                    if(result == true) {
+                    if(result.data == true) {
                         location.href = "book_list.html?currentPage=1";
                     } else {
                         alert("用户名或者密码错误，请重新输入！");
