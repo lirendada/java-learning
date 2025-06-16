@@ -1,6 +1,5 @@
-package com.liren.aop;
+package com.liren.transaction;
 
-import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
