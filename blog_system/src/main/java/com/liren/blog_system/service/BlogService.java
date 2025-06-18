@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface BlogService {
     List<BlogResponse> getList();
+
+    BlogResponse getBlogDetail(Integer id);
 }

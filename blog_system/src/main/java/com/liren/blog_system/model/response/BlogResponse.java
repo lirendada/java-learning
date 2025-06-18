@@ -3,7 +3,7 @@ package com.liren.blog_system.model.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class BlogResponse {
@@ -11,6 +11,6 @@ public class BlogResponse {
     private String title;
     private String content;
     private Integer userId;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 }

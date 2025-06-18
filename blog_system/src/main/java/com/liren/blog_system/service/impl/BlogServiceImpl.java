@@ -7,12 +7,14 @@ import com.liren.blog_system.mapper.BlogInfoMapper;
 import com.liren.blog_system.model.BlogInfo;
 import com.liren.blog_system.model.response.BlogResponse;
 import com.liren.blog_system.service.BlogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class BlogServiceImpl implements BlogService {
     @Autowired
@@ -29,5 +31,14 @@ public class BlogServiceImpl implements BlogService {
                 .map(blogInfo -> BeanTransUtils.trans(blogInfo))
                 .collect(Collectors.toList());
         return blogResponses;
+    }
+
+    @Override
+    public BlogResponse getBlogDetail(Integer id) {
+        LambdaQueryWrapper<BlogInfo> qw = new LambdaQueryWrapper<BlogInfo>()
+                .eq(BlogInfo::getId, id)
+                .eq(BlogInfo::getDeleteFlag, Constants.BLOG_NORMAL);
+        BlogInfo blogInfo = blogInfoMapper.selectOne(qw);
+        return BeanTransUtils.trans(blogInfo);
     }
 }

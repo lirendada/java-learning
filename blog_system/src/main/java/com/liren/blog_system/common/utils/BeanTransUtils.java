@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 public class BeanTransUtils {
     /**
-     * 将BlogInfo转化为BlogResponse
+     * 将BlogInfo转化为BlogResponse，注意对应要转换的字段名要相同
      * @param blogInfo
      * @return
      */

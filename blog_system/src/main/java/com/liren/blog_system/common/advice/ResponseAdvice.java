@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @Slf4j
 @ResponseBody
 @ControllerAdvice
-public class ResponseAdvice implements ResponseBodyAdvice {
+public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -29,6 +29,7 @@ public class ResponseAdvice implements ResponseBodyAdvice {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         if(body instanceof String) {
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             return objectMapper.writeValueAsString(Result.success(body));
         }
         if(body instanceof Result) {

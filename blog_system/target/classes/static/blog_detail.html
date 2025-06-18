@@ -14,8 +14,8 @@
 
 <body>
     <div class="nav">
-        <img src="pic/logo2.jpg" alt="">
-        <span class="blog-title">我的博客系统</span>
+        <img src="pic/doge.jpg" alt="">
+        <span class="blog-title">博客系统</span>
         <div class="space"></div>
         <a class="nav-span" href="blog_list.html">主页</a>
         <a class="nav-span" href="blog_edit.html">写博客</a>
@@ -25,9 +25,9 @@
     <div class="container">
         <div class="left">
             <div class="card">
-                <img src="pic/doge.jpg" alt="">
-                <h3>比特汤老师</h3>
-                <a href="#">GitHub 地址</a>
+                <img src="pic/hya1.jpg" alt="">
+                <h3>momo</h3>
+                <a href="#">GitHub地址</a>
                 <div class="row">
                     <span>文章</span>
                     <span>分类</span>
@@ -40,25 +40,8 @@
         </div>
         <div class="right">
             <div class="content">
-                <div class="title">我的第一篇博客</div>
-                <div class="date">2021-06-02</div>
-                <div class="detail">
-                    <p>从今天开始, 好好学习~Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati cumque alias
-                        laborum numquam aliquam? Ipsam aliquam dolorem officiis! Magni pariatur officiis iusto? Et unde
-                        quo fuga, minus deserunt architecto eligendi.</p>
-                    <p>从今天开始, 好好学习~Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati cumque alias
-                        laborum numquam aliquam? Ipsam aliquam dolorem officiis! Magni pariatur officiis iusto? Et unde
-                        quo fuga, minus deserunt architecto eligendi.</p>
-                    <p>从今天开始, 好好学习~Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati cumque alias
-                        laborum numquam aliquam? Ipsam aliquam dolorem officiis! Magni pariatur officiis iusto? Et unde
-                        quo fuga, minus deserunt architecto eligendi.</p>
-                </div>
-                <div class="operating">
-                    <button onclick="window.location.href='blog_update.html'">编辑</button>
-                    <button onclick="deleteBlog()">删除</button>
-                </div>
-            </div>
 
+            </div>
         </div>
     </div>
 
@@ -70,7 +53,61 @@
     <script src="blog-editormd/editormd.js"></script>
     <script src="js/common.js"></script>
     <script>
-        
+        $.ajax({
+            url: "blog/getBlogDetail" + location.search,
+            type: "get",
+            success: function(result) {
+                console.log(result);
+                if(result != null && result.code == 200 && result.data != null) {
+                    let str = "";
+                    let blog = result.data;
+                    str += '<div class="title">' + blog.title + '</div>';
+                    str += '<div class="date">' + blog.updateTime + '</div>';
+                    str += '<div class="detail">';
+                    str += blog.content;
+                    str += '</div><div class="operating">';
+                    str += '<button onclick="window.location.href=\'blog_update.html\'">编辑</button>';
+                    str += '<button onclick="deleteBlog()">删除</button>';
+                    str += '</div>';
+
+                    $(".container .right .content").html(str);
+                } else {
+                    handleError(result);
+                }
+            },
+            error:  function(xhr) {
+                if (xhr.status === 401) {
+                    alert("用户未登录，请先登录~");
+                    location.href = "/blog_login.html";
+                } else if (xhr.status === 0) {
+                    alert("无法连接服务器，请检查网络");
+                } else if (xhr.status === 404) {
+                    alert("请求的接口不存在");
+                } else {
+                    alert("系统异常，请稍后重试（状态码：" + xhr.status + "）");
+                }
+            }
+        });
+
+        function handleError(res) {
+            switch (res?.code) { // ✅ 安全：如果 res 为 null/undefined，则返回 undefined，不报错
+                case 401:
+                case 403:
+                    alert("请登录后操作");
+                    location.href = "/blog_login.html";
+                    break;
+                case 400:
+                    alert(res.errMsg || "请求参数错误");
+                    break;
+                case 500:
+                    alert("系统异常，请稍后重试");
+                    break;
+                default:
+                    alert(res.errMsg || "请求失败");
+                    location.href = "blog_list.html";
+            }
+        }
+
         //显示博客作者信息
         //var userUrl = "/user/getAuthorInfo" + location.search;
         //getUserInfo(userUrl);

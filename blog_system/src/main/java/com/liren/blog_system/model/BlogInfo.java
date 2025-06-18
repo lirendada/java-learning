@@ -15,6 +15,6 @@ public class BlogInfo {
     private String content;
     private Integer userId;
     private Integer deleteFlag;
-    private Date createTime;
+    private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }
