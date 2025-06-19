@@ -39,9 +39,29 @@
         </div>
     </div>
     <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
     <script>
         function login() {
-            location.assign("blog_list.html");
+            $.ajax({
+               url: "user/login",
+               type: "post",
+                data: JSON.stringify({
+                    userName: $("#username").val(),
+                    password: $("#password").val()
+                }),
+                contentType: "application/json",
+                success: function(result) {
+                    console.log(result);
+                   if(result != null && result.code == 200 && result.data != null) {
+                       let response = result.data;
+                       localStorage.setItem("user_token", response.token); // 利用localStorage.setItem进行存储
+                       localStorage.setItem("loginUserId", response.userId);
+                       location.assign("blog_list.html");
+                   } else {
+                       handleError(result);
+                   }
+                }
+            });
         }
     </script>
 </body>

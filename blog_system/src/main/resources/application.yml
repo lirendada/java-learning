@@ -13,3 +13,6 @@ mybatis-plus:
 logging:
   file:
     name: spring-blog.log
+
+jwt:
+  secret: wFApjmSTFmWZZix27k/w5ltH3YK9u3/e01IdCNsZ4Jk=
