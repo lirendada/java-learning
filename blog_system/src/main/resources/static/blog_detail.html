@@ -40,6 +40,10 @@
         </div>
         <div class="right">
             <div class="content">
+                <div class="title"></div>
+                <div class="date"></div>
+                <div class="detail" id="detail" style="background-color: transparent;">
+                </div>
 
             </div>
         </div>
@@ -61,16 +65,23 @@
                 if(result != null && result.code == 200 && result.data != null) {
                     let str = "";
                     let blog = result.data;
-                    str += '<div class="title">' + blog.title + '</div>';
-                    str += '<div class="date">' + blog.updateTime + '</div>';
-                    str += '<div class="detail">';
-                    str += blog.content;
-                    str += '</div><div class="operating">';
-                    str += '<button onclick="window.location.href=\'blog_update.html\'">编辑</button>';
-                    str += '<button onclick="deleteBlog()">删除</button>';
-                    str += '</div>';
+                    $(".container .right .content .title").text(blog.title);
+                    $(".container .right .content .date").text(blog.updateTime);
 
-                    $(".container .right .content").html(str);
+                    // 显示markdown样式
+                    editormd.markdownToHTML("detail", {
+                       markdown: blog.content
+                    });
+
+                    // 只有作者才显示编辑和删除按钮
+                    let userid = localStorage.getItem("loginUserId");
+                    if(userid == blog.userId) {
+                        let html = "";
+                        html += '<div class="operating">';
+                        html += '<button onclick="window.location.href=\'blog_update.html' + location.search + '\'">编辑</button>';
+                        html += '<button onclick="deleteBlog()">删除</button></div>';
+                        $(".right .content").append(html);
+                    }
                 } else {
                     handleError(result);
                 }
@@ -80,7 +91,21 @@
         getUserInfo("/user/getAuthorInfo" + location.search);
 
         function deleteBlog() {
-            alert("删除博客");
+            let ret = confirm("确认要删除该博客？");
+            if(ret == true) {
+                $.ajax({
+                    url: "blog/delete" + location.search,
+                    type: "get",
+                    success: function(result) {
+                        if(result != null && result.code == 200 && result.data == true) {
+                            alert("删除成功！");
+                            location.href = "blog_list.html";
+                        } else {
+                            alert("删除失败！");
+                        }
+                    }
+                });
+            }
         }
     </script>
 </body>

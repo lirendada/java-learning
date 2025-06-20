@@ -1,6 +1,7 @@
 package com.liren.blog_system.controller;
 
 import com.liren.blog_system.model.request.AddBlogRequest;
+import com.liren.blog_system.model.request.UpdateBlogRequest;
 import com.liren.blog_system.model.response.BlogResponse;
 import com.liren.blog_system.service.BlogService;
 import jakarta.annotation.Resource;
@@ -38,5 +39,17 @@ public class BlogController {
     public Boolean addBlog(@RequestBody @Validated AddBlogRequest req) {
         log.info("addBlog: " + req);
         return blogService.addBlog(req);
+    }
+
+    @RequestMapping("/update")
+    public Boolean updateBlog(@RequestBody @Validated UpdateBlogRequest req) {
+        log.info("updateBlog: " + req);
+        return blogService.updateBlog(req);
+    }
+
+    @RequestMapping("/delete")
+    public Boolean deleteBlog(@RequestParam("blogId") @NotNull Integer id) {
+        log.info("deleteBlog: " + id);
+        return blogService.deleteBlog(id);
     }
 }

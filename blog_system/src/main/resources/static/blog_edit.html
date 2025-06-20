@@ -25,7 +25,7 @@
     <div class="content-edit">
         <div class="push">
             <input type="text" name="" id="title">
-            <input type="button" value="发布文章" id="submit" onclick="submit()">
+            <input type="button" value="发布文章" id="submit" onclick="submitAdd()">
         </div>
         <!-- markdown 插件 html代码 -->
         <div id="editor">
@@ -46,26 +46,26 @@
             });
         });
 
-        function submit() {
+        function submitAdd() {
             $.ajax({
-               url: "blog/add",
-               type: "post",
-               data: JSON.stringify({
-                   userId: localStorage.getItem("loginUserId"),
-                   title: $("#title").val(),
-                   content: $("#content").val()
-               }),
+                url: "blog/add",
+                type: "post",
+                data: JSON.stringify({
+                    userId: localStorage.getItem("loginUserId"),
+                    title: $("#title").val(),
+                    content: $("#content").val()
+                }),
                 contentType: "application/json",
                 success: function(result) {
-                   if(result != null && result.data == true) {
-                       alert("发布博客成功~");
-                       location.href = "blog_list.html";
-                   } else if (result != null && result.data == false) {
-                       alert("发布博客失败：" + result.errMsg)
-                   }
-                   else {
-                       handleError(result);
-                   }
+                    if(result != null && result.data == true) {
+                        alert("发布博客成功~");
+                        location.href = "blog_list.html";
+                    } else if (result != null && result.data == false) {
+                        alert("发布博客失败：" + result.errMsg)
+                    }
+                    else {
+                        handleError(result);
+                    }
                 }
             });
         }

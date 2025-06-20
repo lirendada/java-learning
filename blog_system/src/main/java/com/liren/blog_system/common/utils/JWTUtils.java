@@ -1,13 +1,13 @@
 package com.liren.blog_system.common.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -34,12 +34,18 @@ public class JWTUtils {
             throw new IllegalStateException("SECRET_KEY 未初始化！");
         }
 
-        String jwt = Jwts.builder()
-                .setClaims(claims)
-                .signWith(SECRET_KEY)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 3600_000)) // 1小时有效
-                .compact(); // 👈 核心！将 header + payload + signature 拼接、压缩、编码成一个标准的 JWT 字符串。
+        String jwt = null;
+        try {
+            jwt = Jwts.builder()
+                    .setClaims(claims)
+                    .signWith(SECRET_KEY)
+                    .setIssuedAt(new Date())
+//                    .setExpiration(new Date(System.currentTimeMillis() + 3600_000)) // 1小时有效
+                    .setExpiration(new Date(System.currentTimeMillis() + 30_000)) // 30s有效
+                    .compact(); // 👈 核心！将 header + payload + signature 拼接、压缩、编码成一个标准的 JWT 字符串。
+        } catch (Exception e) {
+            log.error("创建令牌出错，错误 = {}", e.getMessage());
+        }
         return jwt;
     }
 
@@ -50,7 +56,7 @@ public class JWTUtils {
         if (SECRET_KEY == null) {
             throw new IllegalStateException("SECRET_KEY 未初始化！");
         }
-        if(jwt.isEmpty()) {
+        if(!StringUtils.hasText(jwt)) {
             throw new IllegalStateException("JWT参数错误！");
         }
 
@@ -59,11 +65,24 @@ public class JWTUtils {
             claim = (Claims) Jwts.parserBuilder()
                     .setSigningKey(SECRET_KEY)
                     .build()
-                    .parse(jwt)
+                    .parseClaimsJws(jwt)
                     .getBody();
+
+            // ✅ 检查是否过期
+            if (claim.getExpiration().before(new Date())) {
+                throw new RuntimeException("Token 已过期");
+            }
+            return claim;
+
+        } catch (ExpiredJwtException e) {
+            log.warn("Token 已过期: {}", jwt);
+            return null;
+        } catch (JwtException e) {
+            log.warn("Token 非法: {}", jwt);
+            return null;
         } catch (Exception e) {
             log.error("解析令牌出错，token = {}, 错误 = {}", jwt, e.getMessage());
+            return null;
         }
-        return claim; // 有效就返回 claim，失败就返回 null
     }
 }
