@@ -26,7 +26,7 @@
         <div class="push">
             <input type="hidden" id="blogId">
             <input type="text" name="" id="title">
-            <input type="button" value="更新文章" id="submit" onclick="submit()">
+            <input type="button" value="更新文章" id="submit" onclick="submitUpdate()">
         </div>
         <!-- markdown 插件 html代码 -->
         <div id="editor">
@@ -38,22 +38,53 @@
     <script src="blog-editormd/editormd.min.js"></script>
     <script src="js/common.js"></script>
     <script type="text/javascript">
-
-        $(function () {
-            var editor = editormd("editor", {
-                width  : "100%",
-                height : "550px",
-                path: "blog-editormd/lib/"
-            });
-        });
-        
-        function submit() {
-           
-        }
-        function getBlogInfo() {
-            
-        }
         getBlogInfo();
+        function getBlogInfo() {
+            $.ajax({
+               url: "blog/getBlogDetail" + location.search,
+               type: "get",
+               success: function(result) {
+                   console.log(result);
+                   if(result != null && result.code == 200 && result.data != null) {
+                       $("#title").val(result.data.title);
+                       $("#blogId").val(result.data.id); // 存起来，在更新按钮发送的时候才能发送博客id
+                       // $("#content").html(result.data.content);
+
+                       // 显示博客内容
+                       editormd("editor", {
+                           width  : "100%",
+                           height : "550px",
+                           path: "blog-editormd/lib/",
+                           onload: function() {
+                               this.watch(); // 启用实时预览
+                               this.setMarkdown(result.data.content); // 把后端返回的Markdown内容设置为编辑器当前内容
+                           }
+                       });
+                   }
+               }
+            });
+        }
+
+        function submitUpdate() {
+            $.ajax({
+               url: "blog/update",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify({
+                   id: $("#blogId").val(),
+                   title: $("#title").val(),
+                   content: $("#content").text()
+                }),
+                success: function(result) {
+                   if(result != null && result.code == 200 && result.data == true) {
+                       alert("更新博客成功！");
+                       location.href = "blog_detail.html" + location.search;
+                   } else {
+                       alert("更新博客失败！");
+                   }
+                }
+            });
+        }
     </script>
 </body>
 
