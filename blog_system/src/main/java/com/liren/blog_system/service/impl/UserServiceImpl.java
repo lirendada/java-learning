@@ -5,6 +5,7 @@ import com.liren.blog_system.common.constants.Constants;
 import com.liren.blog_system.common.exception.BlogException;
 import com.liren.blog_system.common.utils.BeanTransUtils;
 import com.liren.blog_system.common.utils.JWTUtils;
+import com.liren.blog_system.common.utils.SecureUtils;
 import com.liren.blog_system.mapper.BlogInfoMapper;
 import com.liren.blog_system.mapper.UserInfoMapper;
 import com.liren.blog_system.model.BlogInfo;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 走到这说明用户存在，则进行密码判断
-        if(userInfo.getPassword().equals(password)) {
+        if(SecureUtils.isValidated(userInfo.getPassword(), password)) {
             Map<String, Object> claim = Map.of("name", userName, "id", userInfo.getId());
             String jwt = JWTUtils.createJWT(claim);
             return new LoginResponse(userInfo.getId(), jwt);
