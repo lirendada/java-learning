@@ -13,11 +13,13 @@ import com.liren.blog_system.model.UserInfo;
 import com.liren.blog_system.model.response.LoginResponse;
 import com.liren.blog_system.model.response.UserResponse;
 import com.liren.blog_system.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired

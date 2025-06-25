@@ -70,7 +70,30 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profile.name>dev</profile.name>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profile.name>prod</profile.name>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <filtering>true</filtering> &lt;!&ndash; 💥💥💥开启占位符替换 &ndash;&gt;-->
+<!--            </resource>-->
+<!--        </resources>-->
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
