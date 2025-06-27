@@ -1,6 +1,6 @@
-package com.liren.bean_theory.config;
+package com.liren.bean_theory.demo1.config;
 
-import com.liren.bean_theory.model.Dog;
+import com.liren.bean_theory.demo1.model.Dog;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;

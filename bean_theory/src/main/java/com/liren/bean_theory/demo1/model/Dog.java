@@ -1,4 +1,4 @@
-package com.liren.bean_theory.model;
+package com.liren.bean_theory.demo1.model;
 
 
 public class Dog {

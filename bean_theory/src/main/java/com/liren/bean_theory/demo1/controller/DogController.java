@@ -1,7 +1,7 @@
-package com.liren.bean_theory.controller;
+package com.liren.bean_theory.demo1.controller;
 
 
-import com.liren.bean_theory.model.Dog;
+import com.liren.bean_theory.demo1.model.Dog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
