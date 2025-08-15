@@ -28,6 +28,7 @@ public class demo1 {
         while(!pq.isEmpty()) {
             System.out.println(pq.poll());
         };
+        System.out.println("");
 
         PriorityQueue<Integer> pq1 = new PriorityQueue<>(new greatercmp());
         pq1.add(10);
@@ -36,6 +37,7 @@ public class demo1 {
         while(!pq1.isEmpty()) {
             System.out.println(pq1.poll());
         }
+        System.out.println("");
 
         Queue<Integer> q = new LinkedList<>();
         q.add(10);
