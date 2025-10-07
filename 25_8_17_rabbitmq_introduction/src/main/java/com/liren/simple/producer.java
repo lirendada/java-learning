@@ -1,4 +1,4 @@
-package com.liren;
+package com.liren.simple;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -14,11 +14,11 @@ public class producer {
         ConnectionFactory factory = new ConnectionFactory();
 
         // 2. 设置参数
-        factory.setHost("113.45.137.183");   // 设置ip
+        factory.setHost("127.0.0.1");   // 设置ip
         factory.setPort(5672);               // 设置端口
         factory.setVirtualHost("lirendada"); // 设置虚拟主机名称
-        factory.setUsername("admin");        // 设置用户名
-        factory.setPassword("123123");       // 设置密码
+        factory.setUsername("liren");        // 设置用户名
+        factory.setPassword("123456");       // 设置密码
 
         // 3. 创建连接Connection
         Connection connection = factory.newConnection();
