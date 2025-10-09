@@ -24,4 +24,8 @@ public class Constants {
     public static String TOPIC_EXCHANGE = "topic.exchange";
     public static String TOPIC_QUEUE1 = "topic.queue1";
     public static String TOPIC_QUEUE2 = "topic.queue2";
+
+    // rpc模式
+    public static String RPC_REQUEST_QUEUE = "rpc.request.queue";
+    public static String RPC_RESPONSE_QUEUE = "rpc.response.queue";
 }
