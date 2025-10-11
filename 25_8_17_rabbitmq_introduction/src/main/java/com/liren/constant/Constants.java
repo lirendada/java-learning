@@ -5,7 +5,7 @@ public class Constants {
     public static final int PORT = 5672;
     public static final String VIRTUALHOST = "lirendada";
     public static final String USERNAME = "liren";
-    public static final String PASSWORD = "123456";
+    public static final String PASSWORD = "123123";
 
     // 工作队列模式
     public static final String WORK_QUEUE = "work.queue";
@@ -28,4 +28,9 @@ public class Constants {
     // rpc模式
     public static String RPC_REQUEST_QUEUE = "rpc.request.queue";
     public static String RPC_RESPONSE_QUEUE = "rpc.response.queue";
+
+    // 发布确认机制
+    public static String PUBLISH_CONFIRM_QUEUE1 = "publish.confirm.queue1";
+    public static String PUBLISH_CONFIRM_QUEUE2 = "publish.confirm.queue2";
+    public static String PUBLISH_CONFIRM_QUEUE3 = "publish.confirm.queue3";
 }
