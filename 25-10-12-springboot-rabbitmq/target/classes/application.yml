@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: 25-10-12-springboot-rabbitmq
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: liren
+    password: 123123
+    virtual-host: lirendada
