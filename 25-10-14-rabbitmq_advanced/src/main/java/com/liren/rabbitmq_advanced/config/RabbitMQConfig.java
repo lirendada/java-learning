@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
+    // 消息确认
     @Bean("ackQueue")
     public Queue ackQueue() {
         return QueueBuilder.durable(Constants.ACK_QUEUE).build();
@@ -22,5 +23,23 @@ public class RabbitMQConfig {
     public Binding ackBinding(@Qualifier("ackQueue") Queue queue,
                               @Qualifier("ackExchange") DirectExchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("ack");
+    }
+
+
+    // 发布确认机制
+    @Bean("confirmQueue")
+    public Queue confirmQueue() {
+        return QueueBuilder.durable(Constants.CONFIRM_QUEUE).build();
+    }
+
+    @Bean("confirmExchange")
+    public DirectExchange confirmExchange() {
+        return ExchangeBuilder.directExchange(Constants.CONFIRM_EXCHANGE_NAME).durable(true).build();
+    }
+
+    @Bean("confirmBinding")
+    public Binding confirmBinding(@Qualifier("confirmQueue")Queue queue,
+                                  @Qualifier("confirmExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("confirm").noargs();
     }
 }

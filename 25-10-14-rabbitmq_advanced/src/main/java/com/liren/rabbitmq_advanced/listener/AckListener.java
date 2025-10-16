@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+//@Component
 public class AckListener {
     @RabbitListener(queues = Constants.ACK_QUEUE)
     public void ListenerQueue(Message message, Channel channel) throws IOException, InterruptedException {

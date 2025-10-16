@@ -6,4 +6,5 @@ spring:
     addresses: amqp://liren:123123@127.0.0.1/lirendada
     listener:
       simple:
-        acknowledge-mode: manual # 设置确认机制
+        acknowledge-mode: manual        # 消息确认
+    publisher-confirm-type: correlated  # 发布确认机制
