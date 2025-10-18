@@ -20,4 +20,11 @@ public class Constants {
     public static final String TTL_TIME = "10000"; // 10s
     public static final String TTL_EXCHANGE_NAME = "ttl_exchange";
     public static final String TTL_QUEUE = "ttl_queue";
+
+
+    // 死信
+    public static final String NORMAL_EXCHANGE = "normal_exchange";
+    public static final String NORMAL_QUEUE = "normal_queue";
+    public static final String DL_EXCHANGE = "dl_exchange";
+    public static final String DL_QUEUE = "dl_queue";
 }

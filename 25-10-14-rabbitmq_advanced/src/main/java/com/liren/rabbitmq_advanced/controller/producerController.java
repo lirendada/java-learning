@@ -69,4 +69,17 @@ public class producerController {
         });
         return "发送成功！";
     }
+
+    @RequestMapping("/dlx")
+    public String dlx() {
+        // 1. 测试过期时间, 当时间达到TTL, 消息自动进入到死信队列
+        rabbitTemplate.convertAndSend(Constants.NORMAL_EXCHANGE, "normal", "dlx test...");
+
+        // 2. 测试队列长度溢出，消息自动进入到死信队列
+//        for(int i = 0; i < 20; ++i) {
+//            rabbitTemplate.convertAndSend(Constants.NORMAL_EXCHANGE, "normal", "dlx test...");
+//        }
+
+        return "发送成功！";
+    }
 }

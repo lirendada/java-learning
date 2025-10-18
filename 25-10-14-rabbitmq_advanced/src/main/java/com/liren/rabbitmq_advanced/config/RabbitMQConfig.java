@@ -79,8 +79,48 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(queue).to(exchange).with("ttl").noargs();
     }
 
-    @Bean("ttlQueue2")
-    public Queue ttlQueue2() {
-        return QueueBuilder.durable(Constants.TTL_QUEUE).ttl(Integer.valueOf(Constants.TTL_TIME)).build();
+//    @Bean("ttlQueue2")
+//    public Queue ttlQueue2() {
+//        return QueueBuilder.durable(Constants.TTL_QUEUE).ttl(10000).build();
+//    }
+
+
+    // 死信
+    @Bean("normalQueue")
+    public Queue normalQueue() {
+        return QueueBuilder
+                .durable(Constants.NORMAL_QUEUE)
+                .deadLetterExchange(Constants.DL_EXCHANGE) // 绑定死信交换机
+                .deadLetterRoutingKey("dlk")          // 绑定死信路由键
+                .ttl(10000)                                // 过期时间设置10s，方便测试
+                .maxLength(10L)                     // 队列最大长度设为10，方便测试
+                .build();
+    }
+
+    @Bean("normalExchange")
+    public DirectExchange normalExchange() {
+        return ExchangeBuilder.directExchange(Constants.NORMAL_EXCHANGE).durable(true).build();
+    }
+
+    @Bean("normalBinding")
+    public Binding normalBinding(@Qualifier("normalQueue")Queue queue,
+                              @Qualifier("normalExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("normal").noargs();
+    }
+
+    @Bean("dlQueue")
+    public Queue dlQueue() {
+        return QueueBuilder.durable(Constants.DL_QUEUE).build();
+    }
+
+    @Bean("dlExchange")
+    public DirectExchange dlExchange() {
+        return ExchangeBuilder.directExchange(Constants.DL_EXCHANGE).durable(true).build();
+    }
+
+    @Bean("dlBinding")
+    public Binding dlBinding(@Qualifier("dlQueue")Queue queue,
+                                 @Qualifier("dlExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("dlk").noargs();
     }
 }
