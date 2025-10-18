@@ -60,4 +60,27 @@ public class RabbitMQConfig {
                                   @Qualifier("retryExchange")Exchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("retry").noargs();
     }
+
+
+    // TTL
+    @Bean("ttlQueue")
+    public Queue ttlQueue() {
+        return QueueBuilder.durable(Constants.TTL_QUEUE).build();
+    }
+
+    @Bean("ttlExchange")
+    public DirectExchange ttlExchange() {
+        return ExchangeBuilder.directExchange(Constants.TTL_EXCHANGE_NAME).durable(true).build();
+    }
+
+    @Bean("ttlBinding")
+    public Binding ttlBinding(@Qualifier("ttlQueue")Queue queue,
+                                @Qualifier("ttlExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("ttl").noargs();
+    }
+
+    @Bean("ttlQueue2")
+    public Queue ttlQueue2() {
+        return QueueBuilder.durable(Constants.TTL_QUEUE).ttl(Integer.valueOf(Constants.TTL_TIME)).build();
+    }
 }

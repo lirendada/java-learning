@@ -2,6 +2,9 @@ package com.liren.rabbitmq_advanced.controller;
 
 import com.liren.rabbitmq_advanced.constant.Constants;
 import jakarta.annotation.Resource;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,29 @@ public class producerController {
     @RequestMapping("/retry")
     public String retry() {
         rabbitTemplate.convertAndSend(Constants.RETRY_EXCHANGE_NAME, "retry", "retry test...");
+        return "发送成功！";
+    }
+
+//    @RequestMapping("/ttl")
+//    public String ttl() {
+//        MessagePostProcessor messagePostProcessor = new MessagePostProcessor() {
+//            @Override
+//            public Message postProcessMessage(Message message) throws AmqpException {
+//                message.getMessageProperties().setExpiration(Constants.TTL_TIME);
+//                return message;
+//            }
+//        };
+//
+//        rabbitTemplate.convertAndSend(Constants.TTL_EXCHANGE_NAME, "ttl", "ttl test...", messagePostProcessor);
+//        return "发送成功！";
+//    }
+
+    @RequestMapping("/ttl")
+    public String ttl() {
+        rabbitTemplate.convertAndSend(Constants.TTL_EXCHANGE_NAME, "ttl", "ttl test...", message -> {
+            message.getMessageProperties().setExpiration(Constants.TTL_TIME);
+            return message;
+        });
         return "发送成功！";
     }
 }

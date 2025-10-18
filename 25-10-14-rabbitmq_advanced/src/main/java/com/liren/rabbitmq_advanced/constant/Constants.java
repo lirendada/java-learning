@@ -14,4 +14,10 @@ public class Constants {
     // 重试机制
     public static final String RETRY_EXCHANGE_NAME = "retry_exchange";
     public static final String RETRY_QUEUE = "retry_queue";
+
+
+    // TTL
+    public static final String TTL_TIME = "10000"; // 10s
+    public static final String TTL_EXCHANGE_NAME = "ttl_exchange";
+    public static final String TTL_QUEUE = "ttl_queue";
 }
