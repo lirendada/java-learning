@@ -42,4 +42,22 @@ public class RabbitMQConfig {
                                   @Qualifier("confirmExchange")Exchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("confirm").noargs();
     }
+
+
+    // 重试机制
+    @Bean("retryQueue")
+    public Queue retryQueue() {
+        return QueueBuilder.durable(Constants.RETRY_QUEUE).build();
+    }
+
+    @Bean("retryExchange")
+    public DirectExchange retryExchange() {
+        return ExchangeBuilder.directExchange(Constants.RETRY_EXCHANGE_NAME).durable(true).build();
+    }
+
+    @Bean("retryBinding")
+    public Binding retryBinding(@Qualifier("retryQueue")Queue queue,
+                                  @Qualifier("retryExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("retry").noargs();
+    }
 }

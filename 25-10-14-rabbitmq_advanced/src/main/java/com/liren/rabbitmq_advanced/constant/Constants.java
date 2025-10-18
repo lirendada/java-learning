@@ -9,4 +9,9 @@ public class Constants {
     // 发布确认机制
     public static final String CONFIRM_EXCHANGE_NAME = "confirm_exchange";
     public static final String CONFIRM_QUEUE = "confirm_queue";
+
+
+    // 重试机制
+    public static final String RETRY_EXCHANGE_NAME = "retry_exchange";
+    public static final String RETRY_QUEUE = "retry_queue";
 }

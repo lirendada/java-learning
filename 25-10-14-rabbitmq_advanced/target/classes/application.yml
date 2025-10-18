@@ -6,5 +6,10 @@ spring:
     addresses: amqp://liren:123123@127.0.0.1/lirendada
     listener:
       simple:
+#        acknowledge-mode: auto        # 消息确认
         acknowledge-mode: manual        # 消息确认
-    publisher-confirm-type: correlated  # 发布确认机制
+#    publisher-confirm-type: correlated  # 发布确认机制
+        retry:
+          enabled: true             # 开启消费者失败重试
+          initial-interval: 1000ms  # 初始失败等待时长为1秒
+          max-attempts: 5           # 最大重试次数（包括自身消费的一次）

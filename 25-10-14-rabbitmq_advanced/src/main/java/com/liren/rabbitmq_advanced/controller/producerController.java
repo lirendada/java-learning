@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/producer")
 @RestController
 public class producerController {
-    @Resource(name = "ackRabbitTemplate")
-    private RabbitTemplate ackRabbitTemplate;
+    @Resource(name = "rabbitTemplate")
+    private RabbitTemplate rabbitTemplate;
 
     @Resource(name = "confirmRabbitTemplate")
     private RabbitTemplate confirmRabbitTemplate;
 
     @RequestMapping("/ack")
     public String ack() {
-        ackRabbitTemplate.convertAndSend(Constants.ACK_EXCHANGE_NAME, "ack", "consumer ack test...");
+        rabbitTemplate.convertAndSend(Constants.ACK_EXCHANGE_NAME, "ack", "consumer ack test...");
         return "发送成功！";
     }
 
@@ -27,6 +27,20 @@ public class producerController {
     public String confirm() {
         CorrelationData correlationData = new CorrelationData("1");
         confirmRabbitTemplate.convertAndSend(Constants.CONFIRM_EXCHANGE_NAME, "confirm", "consumer confirm test...", correlationData);
+        return "发送成功！";
+    }
+
+    @RequestMapping("/returns")
+    public String returns() {
+        CorrelationData correlationData = new CorrelationData("5");
+        confirmRabbitTemplate.convertAndSend(Constants.CONFIRM_EXCHANGE_NAME, "confirm", "consumer returns test...", correlationData);
+        confirmRabbitTemplate.convertAndSend(Constants.CONFIRM_EXCHANGE_NAME, "confirm11", "consumer returns test...", correlationData);
+        return "发送成功！";
+    }
+
+    @RequestMapping("/retry")
+    public String retry() {
+        rabbitTemplate.convertAndSend(Constants.RETRY_EXCHANGE_NAME, "retry", "retry test...");
         return "发送成功！";
     }
 }
