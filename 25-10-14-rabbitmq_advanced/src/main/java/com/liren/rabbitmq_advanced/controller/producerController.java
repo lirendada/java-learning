@@ -8,6 +8,7 @@ import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -97,6 +98,18 @@ public class producerController {
             return message;
         });
 
+        return "发送成功！";
+    }
+
+    @Resource(name = "transRabbitTemplate")
+    private RabbitTemplate transRabbitTemplate;
+
+    @Transactional
+    @RequestMapping("/trans")
+    public String trans() {
+        transRabbitTemplate.convertAndSend("", "transQueue", "test trans 1...");
+        int a = 5 / 0; // 模拟出现异常
+        transRabbitTemplate.convertAndSend("", "transQueue", "test trans 2...");
         return "发送成功！";
     }
 }

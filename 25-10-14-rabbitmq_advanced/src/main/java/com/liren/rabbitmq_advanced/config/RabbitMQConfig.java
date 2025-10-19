@@ -141,4 +141,11 @@ public class RabbitMQConfig {
                                 @Qualifier("delayExchange")Exchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("delay").noargs();
     }
+
+
+    // 事务
+    @Bean("transQueue")
+    public Queue transQueue() {
+        return QueueBuilder.durable("transQueue").build();
+    }
 }
