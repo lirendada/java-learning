@@ -92,8 +92,8 @@ public class RabbitMQConfig {
                 .durable(Constants.NORMAL_QUEUE)
                 .deadLetterExchange(Constants.DL_EXCHANGE) // 绑定死信交换机
                 .deadLetterRoutingKey("dlk")          // 绑定死信路由键
-                .ttl(10000)                                // 过期时间设置10s，方便测试
-                .maxLength(10L)                     // 队列最大长度设为10，方便测试
+//                .ttl(10000)                                // 过期时间设置10s，方便测试
+//                .maxLength(10L)                     // 队列最大长度设为10，方便测试
                 .build();
     }
 
@@ -122,5 +122,23 @@ public class RabbitMQConfig {
     public Binding dlBinding(@Qualifier("dlQueue")Queue queue,
                                  @Qualifier("dlExchange")Exchange exchange) {
         return BindingBuilder.bind(queue).to(exchange).with("dlk").noargs();
+    }
+
+
+    // 延迟队列
+    @Bean("delayQueue")
+    public Queue delayQueue() {
+        return QueueBuilder.durable(Constants.DELAY_QUEUE).build();
+    }
+
+    @Bean("delayExchange")
+    public DirectExchange delayExchange() {
+        return ExchangeBuilder.directExchange(Constants.DELAY_EXCHANGE).delayed().build();
+    }
+
+    @Bean("delayBinding")
+    public Binding delayBinding(@Qualifier("delayQueue")Queue queue,
+                                @Qualifier("delayExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("delay").noargs();
     }
 }

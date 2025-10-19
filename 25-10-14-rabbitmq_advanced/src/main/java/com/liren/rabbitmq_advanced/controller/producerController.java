@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RequestMapping("/producer")
 @RestController
 public class producerController {
@@ -79,6 +81,21 @@ public class producerController {
 //        for(int i = 0; i < 20; ++i) {
 //            rabbitTemplate.convertAndSend(Constants.NORMAL_EXCHANGE, "normal", "dlx test...");
 //        }
+
+        return "发送成功！";
+    }
+
+    @RequestMapping("/delay")
+    public String delay() {
+        // 发送两条单独带TTL的消息
+        rabbitTemplate.convertAndSend(Constants.DELAY_EXCHANGE, "delay", "delay test 10s..." + new Date(), message -> {
+            message.getMessageProperties().setDelayLong(20000L); // 延迟20s到达死信队列
+            return message;
+        });
+        rabbitTemplate.convertAndSend(Constants.DELAY_EXCHANGE, "delay", "delay test 20s..." + new Date(), message -> {
+            message.getMessageProperties().setDelayLong(10000L); // 延迟10s到达死信队列
+            return message;
+        });
 
         return "发送成功！";
     }
