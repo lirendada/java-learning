@@ -32,4 +32,9 @@ public class Constants {
     // 延迟队列
     public static final String DELAY_EXCHANGE = "delay_exchange";
     public static final String DELAY_QUEUE = "delay_queue";
+
+
+    // 消息分发
+    public static final String QOS_EXCHANGE = "qos_exchange";
+    public static final String QOS_QUEUE = "qos_queue";
 }

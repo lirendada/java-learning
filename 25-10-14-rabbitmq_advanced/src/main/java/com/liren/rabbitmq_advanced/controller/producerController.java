@@ -112,4 +112,12 @@ public class producerController {
         transRabbitTemplate.convertAndSend("", "transQueue", "test trans 2...");
         return "发送成功！";
     }
+
+    @RequestMapping("/qos")
+    public String qos() {
+        for(int i = 0; i < 20; ++i) {
+            rabbitTemplate.convertAndSend(Constants.QOS_EXCHANGE, "qos", "test qos..." + i);
+        }
+        return "发送成功！";
+    }
 }

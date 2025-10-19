@@ -148,4 +148,22 @@ public class RabbitMQConfig {
     public Queue transQueue() {
         return QueueBuilder.durable("transQueue").build();
     }
+
+
+    // 消息分发
+    @Bean("qosQueue")
+    public Queue qosQueue() {
+        return QueueBuilder.durable(Constants.QOS_QUEUE).build();
+    }
+
+    @Bean("qosExchange")
+    public DirectExchange qosExchange() {
+        return ExchangeBuilder.directExchange(Constants.QOS_EXCHANGE).build();
+    }
+
+    @Bean("qosBinding")
+    public Binding qosBinding(@Qualifier("qosQueue")Queue queue,
+                                @Qualifier("qosExchange")Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with("qos").noargs();
+    }
 }
