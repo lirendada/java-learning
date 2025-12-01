@@ -2,6 +2,8 @@ server:
   port: 9090
 
 spring:
+  application:
+    name: product-service
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/cloud_product?characterEncoding=utf8&useSSL=false
     username: root
@@ -11,5 +13,9 @@ spring:
 mybatis:
   configuration:
     # 配置打印 MyBatis 日志
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true  #配置驼峰自动转换
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10010/eureka
