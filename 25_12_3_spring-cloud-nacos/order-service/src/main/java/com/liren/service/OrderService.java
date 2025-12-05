@@ -3,8 +3,10 @@ package com.liren.service;
 import com.liren.mapper.OrderMapper;
 import com.liren.model.OrderInfo;
 import com.liren.model.ProductInfo;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,5 +29,14 @@ public class OrderService {
         ProductInfo productInfo = restTemplate.getForObject(url, ProductInfo.class);
         orderInfo.setProductInfo(productInfo);
         return orderInfo;
+    }
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
+    @PostConstruct
+    public void testServices() {
+        System.out.println("Nacos services: " + discoveryClient.getServices());
+        System.out.println("Instances: " + discoveryClient.getInstances("product-service"));
     }
 }
