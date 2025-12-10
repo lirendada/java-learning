@@ -1,0 +1,7 @@
+com\liren\model\OrderInfo.class
+com\liren\OrderServiceApplication.class
+com\liren\mapper\OrderMapper.class
+com\liren\model\ProductInfo.class
+com\liren\config\BeanConfig.class
+com\liren\controller\OrderController.class
+com\liren\service\OrderService.class

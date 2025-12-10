@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: product-service
+  profiles:
+    active: prod
+  cloud:
+    nacos:
+      config:
+        server-addr: lirendada.art:8848
+#        namespace: 16cb6cdb-bc75-438b-a7a1-205b9a0afbd9

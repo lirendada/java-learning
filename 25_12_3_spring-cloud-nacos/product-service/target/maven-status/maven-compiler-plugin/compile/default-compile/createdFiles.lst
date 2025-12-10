@@ -1,0 +1,6 @@
+com\liren\mapper\ProductMapper.class
+com\liren\service\ProductService.class
+com\liren\model\ProductInfo.class
+com\liren\ProductServiceApplication.class
+com\liren\controller\NacosController.class
+com\liren\controller\ProductController.class

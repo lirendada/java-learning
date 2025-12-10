@@ -1,21 +1,21 @@
 server:
-  port: 8080
+  port: 9090
 
 spring:
-  application:
-    name: order-service
-  profiles:
-    active: prod
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cloud_product?characterEncoding=utf8&useSSL=false
+    username: liren
+    password: Liren0324..
+    driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
       discovery:
         server-addr: lirendada.art:8848
-#        cluster-name: SH   # 集群名称: 上海集群
-#        ephemeral: false  # 设置为非临时实例
+#        cluster-name: SH   # 集群名称：上海集群
 #        namespace: 16cb6cdb-bc75-438b-a7a1-205b9a0afbd9  # 服务管理的命名空间ID
     loadbalancer:
       nacos:
-        enabled: true # 开启nacos的负载均衡策略
+        enabled: true      # 同样需要开启负载均衡策略
 
 mybatis:
   configuration:
