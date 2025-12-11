@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: product-service
+  profiles:
+    active: @profile.name@
+  cloud:
+    nacos:
+      config:
+        server-addr: lirendada.art:8848

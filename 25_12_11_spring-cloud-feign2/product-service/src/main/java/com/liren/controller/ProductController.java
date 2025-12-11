@@ -1,6 +1,6 @@
 package com.liren.controller;
 
-import com.liren.api.ProductInterface;
+import com.liren.api.ProductApi;
 import com.liren.model.ProductInfo;
 import com.liren.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/product")
-public class ProductController implements ProductInterface {
+public class ProductController implements ProductApi {
     @Autowired
     private ProductService productService;
 
