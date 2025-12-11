@@ -10,6 +10,7 @@
     <modules>
         <module>order-service</module>
         <module>product-service</module>
+        <module>product-api</module>
     </modules>
 
     <parent>
