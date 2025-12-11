@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: @profile.name@
+  cloud:
+    nacos:
+      discovery:
+        server-addr: lirendada.art:8848
+    loadbalancer:
+      nacos:
+        enabled: true # 开启nacos的负载均衡策略
+
+mybatis:
+  configuration:
+    # 配置打印 MyBatis 日志
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true  #配置驼峰自动转换
