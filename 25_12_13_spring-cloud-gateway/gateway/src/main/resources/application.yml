@@ -16,6 +16,9 @@ spring:
             - Path=/order/**,/feign/**
           filters:
             - AddRequestParameter=userName, lirendada
+            - name: Custom
+              args:
+                name: lirendada
         - id: product-service
           uri: lb://product-service
           predicates:
@@ -26,3 +29,16 @@ spring:
           args:
             retries: 3
             statuses: BAD_GATEWAY
+
+      metrics:
+        enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
