@@ -3,6 +3,8 @@ package com.liren.gateway.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.liren.common.pojo.Result;
 import com.liren.common.utils.JWTUtils;
+import com.liren.gateway.properties.AuthWhiteList;
+import io.jsonwebtoken.lang.Collections;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -26,7 +28,9 @@ import java.util.List;
 @Component
 public class AuthFilter implements GlobalFilter, Ordered {
     // 白名单
-    private List<String> whiteList = List.of("/user/login", "/user/register");
+//    private List<String> whiteList = List.of("/user/login", "/user/register");
+    @Autowired
+    private AuthWhiteList whiteList;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -37,7 +41,8 @@ public class AuthFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
 
         // 如果请求路径在白名单中的，直接放行
-        if(whiteList.contains(request.getURI().getPath())) {
+        List<String> url = whiteList.getUrl();
+        if(!Collections.isEmpty(url) && url.contains(request.getURI().getPath())) {
             return chain.filter(exchange);
         }
 
