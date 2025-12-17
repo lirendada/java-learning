@@ -1,1 +1,2 @@
 com.liren.common.config.RedisConfig
+com.liren.common.config.MailConfig

@@ -2,6 +2,7 @@ package com.liren.user.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.liren.blog.api.BlogInfoApi;
+import com.liren.common.constant.Constants;
 import com.liren.common.exception.BlogException;
 import com.liren.blog.api.pojo.BlogInfoResponse;
 import com.liren.common.pojo.Result;
@@ -14,6 +15,7 @@ import com.liren.user.dataobject.UserInfo;
 import com.liren.user.mapper.UserInfoMapper;
 import com.liren.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     private static final String USER_PREFIX = "user:";
     private static final long USER_EXPIRE_TIME = 60 * 60 * 24 * 2l; // 2天过期时间
@@ -100,6 +105,11 @@ public class UserServiceImpl implements UserService {
             if(result > 0) {
                 // 插入数据库成功后，写入缓存
                 redisUtil.set(USER_PREFIX + userInfo.getUserName(), JsonUtil.toJson(userInfo), USER_EXPIRE_TIME);
+
+                // 清除密码，然后异步发送邮件
+                userInfo.setPassword("");
+                rabbitTemplate.convertAndSend(Constants.USER_EXCHANGE_NAME, "", JsonUtil.toJson(userInfo));
+
                 return userInfo.getId();
             } else {
                 throw new BlogException("注册失败");

@@ -1,6 +1,9 @@
 package com.liren.user.listener;
 
 import com.liren.common.constant.Constants;
+import com.liren.common.utils.JsonUtil;
+import com.liren.common.utils.MailUtil;
+import com.liren.user.dataobject.UserInfo;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -9,6 +12,7 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,6 +20,9 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class UserRegisterListener {
+    @Autowired
+    private MailUtil mailUtil;
+
     @RabbitListener(bindings = @QueueBinding(
         value = @Queue(value = Constants.USER_QUEUE_NANE, durable = "true"),
         exchange = @Exchange(value = Constants.USER_EXCHANGE_NAME, type = ExchangeTypes.FANOUT)
@@ -27,7 +34,9 @@ public class UserRegisterListener {
             String body = new String(message.getBody());
             log.info("用户注册消息处理成功，deliveryTag={}, message={}", deliveryTag, body);
 
-            // 发送邮件TODO
+            // 发送邮件
+            UserInfo user = JsonUtil.toObject(body, UserInfo.class);
+            mailUtil.sendMail(user.getEmail(), "用户注册成功", "欢迎注册，请点击链接完成激活");
 
             // 确认消息
             channel.basicAck(deliveryTag, true);

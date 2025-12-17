@@ -40,6 +40,22 @@ spring:
       simple:
         acknowledge-mode: manual # 消费者手动确认
 
+  mail:
+    host: smtp.qq.com
+    port: 465
+    username: 2916776007@qq.com
+    password: tmatsqqndzoldgif   # 授权码，不是邮箱密码
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true     # ⭐ 核心
+      mail.smtp.ssl.required: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+      personal: "liren微服务系统"
+
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
