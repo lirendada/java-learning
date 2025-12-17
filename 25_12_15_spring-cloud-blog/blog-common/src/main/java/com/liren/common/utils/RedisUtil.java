@@ -3,6 +3,8 @@ package com.liren.common.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 public class RedisUtil {
     private final StringRedisTemplate redisTemplate;
@@ -24,7 +26,7 @@ public class RedisUtil {
     public boolean set(String key, String value, long timeout) {
         try {
             if(timeout > 0) {
-                redisTemplate.opsForValue().set(key, value, timeout);
+                redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
             } else {
                 set(key, value);
             }

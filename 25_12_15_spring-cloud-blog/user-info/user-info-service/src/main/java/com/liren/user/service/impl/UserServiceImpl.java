@@ -5,9 +5,7 @@ import com.liren.blog.api.BlogInfoApi;
 import com.liren.common.exception.BlogException;
 import com.liren.blog.api.pojo.BlogInfoResponse;
 import com.liren.common.pojo.Result;
-import com.liren.common.utils.JWTUtils;
-import com.liren.common.utils.RegexUtil;
-import com.liren.common.utils.SecurityUtil;
+import com.liren.common.utils.*;
 import com.liren.user.api.pojo.UserInfoRequest;
 import com.liren.user.api.pojo.UserInfoResponse;
 import com.liren.user.api.pojo.UserLoginResponse;
@@ -32,12 +30,24 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BlogInfoApi blogInfoApi;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
+    private static final String USER_PREFIX = "user:";
+    private static final long USER_EXPIRE_TIME = 60 * 60 * 24 * 2l; // 2天过期时间
+
     @Override
     public UserLoginResponse login(UserInfoRequest user) {
-        //验证账号密码是否正确
-        UserInfo userInfo = selectUserInfoByName(user.getUserName());
-        if (userInfo==null || userInfo.getId()==null){
-            throw new BlogException("用户不存在");
+        // 验证账号密码是否正确
+        // 先从缓存中获取用户信息，不存在再去数据库查询
+        UserInfo userInfo = JsonUtil.toObject(redisUtil.get(USER_PREFIX + user.getUserName()), UserInfo.class);
+        if (userInfo==null){
+            userInfo = selectUserInfoByName(user.getUserName()); // 查数据库
+            if(userInfo == null || userInfo.getId() == null) {
+                throw new BlogException("用户不存在");
+            } else {
+                redisUtil.set(USER_PREFIX + user.getUserName(), JsonUtil.toJson(userInfo), USER_EXPIRE_TIME); // 重新写入缓存
+            }
         }
 //        if (!user.getPassword().equals(userInfo.getPassword())){
 //            throw new BlogException("用户密码不正确");
@@ -88,6 +98,8 @@ public class UserServiceImpl implements UserService {
         try {
             int result = userInfoMapper.insert(userInfo);
             if(result > 0) {
+                // 插入数据库成功后，写入缓存
+                redisUtil.set(USER_PREFIX + userInfo.getUserName(), JsonUtil.toJson(userInfo), USER_EXPIRE_TIME);
                 return userInfo.getId();
             } else {
                 throw new BlogException("注册失败");
