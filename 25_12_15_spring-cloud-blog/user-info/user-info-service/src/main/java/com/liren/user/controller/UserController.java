@@ -5,6 +5,7 @@ import com.liren.user.api.UserInfoApi;
 import com.liren.user.api.pojo.UserInfoRequest;
 import com.liren.user.api.pojo.UserInfoResponse;
 import com.liren.user.api.pojo.UserLoginResponse;
+import com.liren.user.api.pojo.UserRegisterRequest;
 import com.liren.user.service.UserService;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -36,5 +37,10 @@ public class UserController implements UserInfoApi {
     @Override
     public Result<UserInfoResponse> getAuthorInfo(@NotNull @RequestParam("blogId") Integer blogId){
         return Result.success(userService.selectAuthorInfoByBlogId(blogId));
+    }
+
+    @Override
+    public Result<Integer> register(@Validated @RequestBody UserRegisterRequest userResgisterRequest) {
+        return Result.success(userService.register(userResgisterRequest));
     }
 }

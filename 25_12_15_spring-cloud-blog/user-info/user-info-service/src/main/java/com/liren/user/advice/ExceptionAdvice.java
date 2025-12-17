@@ -17,15 +17,20 @@ public class ExceptionAdvice {
         log.error("发生异常, e: {}", e);
         return Result.fail(e.getMessage());
     }
+
     @ExceptionHandler
     public Result handler(BlogException e){
         log.error("发生异常, e: {}", e);
         return Result.fail(e.getMessage());
     }
+
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public Result verifyHandle(Exception e){
-        log.error("参数校验失败: {}", e.getMessage());
-        return Result.fail("参数校验失败 ");
+    public Result verifyHandle(MethodArgumentNotValidException e){
+        String msg = e.getBindingResult()
+                .getFieldError()
+                .getDefaultMessage();
+        log.error("参数校验失败: {}", msg);
+        return Result.fail(msg);
     }
 }
