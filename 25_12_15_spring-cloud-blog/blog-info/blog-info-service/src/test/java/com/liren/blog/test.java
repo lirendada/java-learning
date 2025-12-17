@@ -1,4 +1,4 @@
-package com.liren.user;
+package com.liren.blog;
 
 import com.liren.common.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class RedisTest {
+public class test {
     @Autowired
     private RedisUtil redisUtil;
 
     @Test
     public void t1() {
-        boolean set = redisUtil.set("test", "lirendada");
-        String s = redisUtil.get("test");
-        System.out.println(s);
+        System.out.println(redisUtil.get("test"));
     }
 }
