@@ -24,26 +24,29 @@ public class UserRegisterListener {
     private MailUtil mailUtil;
 
     @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = Constants.USER_QUEUE_NANE, durable = "true"),
-        exchange = @Exchange(value = Constants.USER_EXCHANGE_NAME, type = ExchangeTypes.FANOUT)
+            value = @Queue(value = Constants.USER_QUEUE_NANE, durable = "true"),
+            exchange = @Exchange(value = Constants.USER_EXCHANGE_NAME, type = ExchangeTypes.FANOUT)
     ))
     public void MailListenerQueue(Message message, Channel channel) throws IOException {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
         try {
-            // 处理用户注册消息
             String body = new String(message.getBody());
-            log.info("用户注册消息处理成功，deliveryTag={}, message={}", deliveryTag, body);
-
-            // 发送邮件
+            // 尝试解析
             UserInfo user = JsonUtil.toObject(body, UserInfo.class);
-            mailUtil.sendMail(user.getEmail(), "用户注册成功", "欢迎注册，请点击链接完成激活");
+
+            // 只有解析成功且内容不为空才发送邮件
+            if (user != null && user.getEmail() != null) {
+                log.info("用户注册消息处理成功，发送邮件给: {}", user.getEmail());
+                mailUtil.sendMail(user.getEmail(), "用户注册成功", "欢迎注册，请点击链接完成激活");
+            }
 
             // 确认消息
             channel.basicAck(deliveryTag, true);
-        }catch (Exception e) {
-            // 异常拒绝消息，进行重发
-            channel.basicNack(deliveryTag, true, true);
-            log.error("用户注册消息处理失败，拒绝消息，deliveryTag={}", deliveryTag, e);
+        } catch (Exception e) {
+            log.error("用户注册消息处理失败，放弃该消息。deliveryTag={}, error={}", deliveryTag, e.getMessage());
+            // 核心修改：第三个参数改为 false，表示不重新入队 (Don't Requeue)
+            // 这种解析错误的“毒药消息”如果重试永远会错，必须丢弃
+            channel.basicNack(deliveryTag, true, false);
         }
     }
 }

@@ -1,8 +1,9 @@
 spring:
+  profiles:
+    active: @profile.name@ # Maven 打包时替换
   application:
     name: gateway-service
   cloud:
     nacos:
       config:
-        server-addr: lirendada.art:8848
         file-extension: yaml
