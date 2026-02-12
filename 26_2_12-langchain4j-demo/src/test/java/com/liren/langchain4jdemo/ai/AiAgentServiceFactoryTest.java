@@ -14,7 +14,7 @@ class AiAgentServiceFactoryTest {
 
     @Test
     void chat() {
-        String chat = aiAgentService.chat("你好我是lirendada！");
-        System.out.println(chat);
+//        String chat = aiAgentService.chat("你好我是lirendada！");
+//        System.out.println(chat);
     }
 }

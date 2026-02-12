@@ -1,5 +1,7 @@
 package com.liren.langchain4jdemo.ai;
 
+import dev.langchain4j.memory.ChatMemory;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
@@ -14,6 +16,12 @@ public class AiAgentServiceFactory {
 
     @Bean
     public AiAgentService aiAgentService() {
-        return AiServices.create(AiAgentService.class, qwenChatModel);
+
+        AiAgentService agentService = AiServices.builder(AiAgentService.class)
+                .chatModel(qwenChatModel)
+                .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
+                .build();
+
+        return agentService;
     }
 }
