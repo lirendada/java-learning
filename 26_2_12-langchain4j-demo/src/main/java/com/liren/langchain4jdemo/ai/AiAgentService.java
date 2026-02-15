@@ -20,10 +20,12 @@ public interface AiAgentService {
     Report chatToReport(String userMessage);
     // -----------------------------------------
 
+
     // -------------- RAG ----------------
     @SystemMessage(fromResource = "system-prompt.txt")
     Result<String> chatWithRAG(@UserMessage String userMessage);
     // -----------------------------------------
+
 
     // ----------------工具调用------------------
     @SystemMessage("你是一个电商订单助手，如果涉及金额计算必须调用工具")
@@ -31,5 +33,10 @@ public interface AiAgentService {
 
     @SystemMessage("你是天气查询助手，需要调用高德地图天气 API 来回答用户问题")
     String chatWithWeatherTool(String userQuery);
+    // -----------------------------------------
+
+
+    // ----------------MCP调用------------------
+    String chatWithMcp(@UserMessage String userMessage);
     // -----------------------------------------
 }

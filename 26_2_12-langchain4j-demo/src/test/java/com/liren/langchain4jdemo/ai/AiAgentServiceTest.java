@@ -35,4 +35,11 @@ class AiAgentServiceTest {
         String s = aiAgentService.chatWithWeatherTool("今天汕头市的天气怎么样？");
         System.out.println(s);
     }
+
+    @Test
+    void chatWithMcp() {
+        String result = aiAgentService.chatWithMcp("利刃大大的博客怎么样？");
+        System.out.println(result);
+    }
+
 }

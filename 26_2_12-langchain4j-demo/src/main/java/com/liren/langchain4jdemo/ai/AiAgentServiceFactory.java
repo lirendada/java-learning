@@ -2,6 +2,7 @@ package com.liren.langchain4jdemo.ai;
 
 import com.liren.langchain4jdemo.ai.tools.AmapWeatherTool;
 import com.liren.langchain4jdemo.ai.tools.OrderCalculatorTool;
+import dev.langchain4j.mcp.McpToolProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
@@ -19,6 +20,9 @@ public class AiAgentServiceFactory {
     @Resource
     private ContentRetriever contentRetriever;
 
+    @Resource
+    private McpToolProvider mcpToolProvider;
+
     @Bean
     public AiAgentService aiAgentService() {
 
@@ -29,6 +33,7 @@ public class AiAgentServiceFactory {
                 .tools(new OrderCalculatorTool()   // 注册工具类
 //                       new AmapWeatherTool()
                 )
+                .toolProvider(mcpToolProvider)     // 注册mcp服务
                 .build();
 
         return agentService;
