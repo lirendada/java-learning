@@ -5,8 +5,6 @@ import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class AiAgentServiceTest {
     @Resource
@@ -24,5 +22,17 @@ class AiAgentServiceTest {
         System.out.println(s.content());
         System.out.println(s.tokenUsage());
         System.out.println(s.sources());
+    }
+
+    @Test
+    void chatWithCalculator() {
+        String s = aiAgentService.chatWithCalculatorTool("单价 99.8 元，买 3 件，打 8 折，一共多少钱？");
+        System.out.println(s);
+    }
+
+    @Test
+    void chatWithWeather() {
+        String s = aiAgentService.chatWithWeatherTool("今天汕头市的天气怎么样？");
+        System.out.println(s);
     }
 }

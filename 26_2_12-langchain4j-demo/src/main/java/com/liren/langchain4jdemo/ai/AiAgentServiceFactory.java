@@ -1,6 +1,7 @@
 package com.liren.langchain4jdemo.ai;
 
-import dev.langchain4j.memory.ChatMemory;
+import com.liren.langchain4jdemo.ai.tools.AmapWeatherTool;
+import com.liren.langchain4jdemo.ai.tools.OrderCalculatorTool;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
@@ -25,6 +26,9 @@ public class AiAgentServiceFactory {
                 .chatModel(qwenChatModel)
                 .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                 .contentRetriever(contentRetriever) // rag检索功能增强
+                .tools(new OrderCalculatorTool()   // 注册工具类
+//                       new AmapWeatherTool()
+                )
                 .build();
 
         return agentService;
