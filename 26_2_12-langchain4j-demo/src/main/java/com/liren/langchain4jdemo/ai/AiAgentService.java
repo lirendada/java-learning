@@ -4,6 +4,7 @@ import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.Result;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -38,5 +39,10 @@ public interface AiAgentService {
 
     // ----------------MCP调用------------------
     String chatWithMcp(@UserMessage String userMessage);
+    // -----------------------------------------
+
+
+    // ----------------SSE流式调用------------------
+    Flux<String> chatWithSSE(@MemoryId int memoryId, @UserMessage String userMessage);
     // -----------------------------------------
 }

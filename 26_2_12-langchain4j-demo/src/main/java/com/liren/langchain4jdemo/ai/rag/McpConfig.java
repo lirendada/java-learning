@@ -20,8 +20,8 @@ public class McpConfig {
         // 和 MCP 服务通讯
         McpTransport transport = new HttpMcpTransport.Builder()
                 .sseUrl("https://open.bigmodel.cn/api/mcp/web_search/sse?Authorization=" + apiKey)
-                .logRequests(true) // 开启日志，查看更多信息
-                .logResponses(true)
+//                .logRequests(true) // 开启日志，查看更多信息
+//                .logResponses(true)
                 .build();
 
         // 创建 MCP 客户端

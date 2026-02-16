@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.langchain4j.agent.tool.P;
 import dev.langchain4j.agent.tool.Tool;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.URI;
 import java.net.http.HttpClient;

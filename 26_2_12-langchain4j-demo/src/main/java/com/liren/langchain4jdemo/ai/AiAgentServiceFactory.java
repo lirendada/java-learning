@@ -5,6 +5,7 @@ import com.liren.langchain4jdemo.ai.tools.OrderCalculatorTool;
 import dev.langchain4j.mcp.McpToolProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.chat.ChatModel;
+import dev.langchain4j.model.chat.StreamingChatModel;
 import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.Resource;
@@ -23,11 +24,15 @@ public class AiAgentServiceFactory {
     @Resource
     private McpToolProvider mcpToolProvider;
 
+    @Resource
+    private StreamingChatModel qwenStreamingChatModel;
+
     @Bean
     public AiAgentService aiAgentService() {
 
         AiAgentService agentService = AiServices.builder(AiAgentService.class)
                 .chatModel(qwenChatModel)
+                .streamingChatModel(qwenStreamingChatModel)
                 .chatMemoryProvider(memoryId -> MessageWindowChatMemory.withMaxMessages(10))
                 .contentRetriever(contentRetriever) // rag检索功能增强
                 .tools(new OrderCalculatorTool()   // 注册工具类
